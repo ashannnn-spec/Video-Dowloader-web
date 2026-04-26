@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Fetch | High-Speed Downloader</title>
+    <style>
+        :root { --primary: #00d2ff; --secondary: #3a7bd5; --dark: #121212; --card: #1e1e1e; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--dark); color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: var(--card); padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 450px; text-align: center; border: 1px solid #333; }
+        h1 { margin-bottom: 0.5rem; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2rem; }
+        p { color: #888; margin-bottom: 2rem; }
+        input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #333; background: #252525; color: white; font-size: 1rem; margin-bottom: 1.5rem; box-sizing: border-box; outline: none; transition: border 0.3s; }
+        input:focus { border-color: var(--primary); }
+        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(to right, var(--primary), var(--secondary)); color: white; font-weight: bold; font-size: 1rem; cursor: pointer; transition: transform 0.2s, opacity 0.2s; }
+        button:hover { transform: translateY(-2px); opacity: 0.9; }
+        button:disabled { background: #444; cursor: not-allowed; }
+        .footer { margin-top: 2rem; font-size: 0.8rem; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cloud Fetch</h1>
+        <p>Enter any file URL to download directly</p>
+        <input type="text" id="urlInput" placeholder="https://example.com/file.zip">
+        <button id="dlBtn" onclick="handleDownload()">Download File</button>
+        <div class="footer">Powered by Netlify Edge Functions</div>
+    </div>
+
+    <script>
+        function handleDownload() {
+            const btn = document.getElementById('dlBtn');
+            const url = document.getElementById('urlInput').value.trim();
+            
+            if (!url) {
+                alert("Please paste a valid URL first.");
+                return;
+            }
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            // Trigger the Netlify Python Function
+            window.location.href = `/.netlify/functions/download?url=${encodeURIComponent(url)}`;
+
+            // Reset button after a delay
+            setTimeout(() => {
+                btn.innerText = "Download File";
+                btn.disabled = false;
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
